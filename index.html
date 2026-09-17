@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kopi Teduh — Coffee Shop di Surabaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#F5EFE2;
+    --parchment-2:#EEE4D0;
+    --espresso:#2A1C12;
+    --espresso-soft:#4A3524;
+    --moss:#5B6B45;
+    --moss-dark:#404C31;
+    --mustard:#C99A3B;
+    --line: rgba(42,28,18,0.16);
+    --card-bg: #FFFFFF;
+    --shadow: none;
+    --bg: var(--parchment);
+    --fg: var(--espresso);
+    --fg-muted: var(--espresso-soft);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #1B140D;
+      --fg: #F2E9D8;
+      --fg-muted: #C9BBA2;
+      --parchment-2: #241B12;
+      --card-bg: #241B12;
+      --line: rgba(242,233,216,0.14);
+      --mustard:#D6A94A;
+      --moss:#7C8F5F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #1B140D;
+    --fg: #F2E9D8;
+    --fg-muted: #C9BBA2;
+    --parchment-2: #241B12;
+    --card-bg: #241B12;
+    --line: rgba(242,233,216,0.14);
+    --mustard:#D6A94A;
+    --moss:#7C8F5F;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Karla', system-ui, -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;}
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+    max-width:1120px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo svg{width:26px; height:26px; flex-shrink:0;}
+  nav.links{display:flex; gap:32px; font-size:0.95rem;}
+  nav.links a{text-decoration:none; color:var(--fg-muted); transition:color .15s;}
+  nav.links a:hover{color:var(--fg);}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 22px;
+    border-radius:3px;
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    font-size:0.92rem;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--moss); color:#fff;}
+  .btn-primary:hover{background:var(--moss-dark);}
+  .btn-ghost{border-color:var(--line); color:var(--fg);}
+  .btn-ghost:hover{border-color:var(--fg-muted);}
+  .btn:focus-visible, a:focus-visible, summary:focus-visible{
+    outline:2px solid var(--moss); outline-offset:3px;
+  }
+  .nav-cta{display:flex; align-items:center; gap:20px;}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:76px 0 60px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-inner{
+    display:grid;
+    grid-template-columns:1.05fr 0.8fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow-line{
+    display:flex; align-items:center; gap:10px;
+    color:var(--moss);
+    font-size:0.92rem; font-weight:600;
+    margin-bottom:18px;
+  }
+  .eyebrow-line .dot{width:7px; height:7px; border-radius:50%; background:var(--mustard);}
+  h1.hero-title{
+    font-size:clamp(2.4rem, 4.6vw, 3.6rem);
+    line-height:1.06;
+    max-width:11.5ch;
+  }
+  .hero-sub{
+    margin-top:22px;
+    font-size:1.12rem;
+    color:var(--fg-muted);
+    max-width:44ch;
+  }
+  .hero-ctas{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .hero-meta{
+    display:flex; gap:28px; margin-top:44px;
+    padding-top:28px; border-top:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .hero-meta div{font-size:0.88rem; color:var(--fg-muted);}
+  .hero-meta strong{display:block; font-family:'Fraunces', serif; font-size:1.4rem; color:var(--fg); font-weight:500;}
+
+  .hero-art{
+    position:relative;
+    display:flex; justify-content:center; align-items:center;
+  }
+  .hero-art svg{width:100%; max-width:340px; height:auto;}
+
+  /* ---------- USP ---------- */
+  .usp{padding:64px 0; border-bottom:1px solid var(--line);}
+  .usp-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+  }
+  .usp-item{
+    padding:8px 32px 8px 0;
+    border-left:1px solid var(--line);
+    padding-left:28px;
+  }
+  .usp-item:first-child{border-left:none; padding-left:0;}
+  .usp-item h3{font-size:1.2rem; margin-bottom:10px;}
+  .usp-item p{color:var(--fg-muted); font-size:0.96rem; margin:0;}
+  .usp-item .num{
+    font-family:'Fraunces', serif; color:var(--mustard);
+    font-size:0.95rem; font-weight:600; margin-bottom:14px; display:block;
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:40px; flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(1.7rem, 3vw, 2.2rem);}
+  .section-head p{color:var(--fg-muted); max-width:38ch; margin:10px 0 0;}
+
+  /* ---------- MENU ---------- */
+  .menu{padding:72px 0; border-bottom:1px solid var(--line);}
+  .menu-list{border-top:1px solid var(--line);}
+  .menu-row{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:24px;
+    align-items:baseline;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .menu-row .name{font-family:'Fraunces', serif; font-size:1.15rem; font-weight:500;}
+  .menu-row .desc{color:var(--fg-muted); font-size:0.92rem; grid-column:1/3; margin-top:4px;}
+  .menu-row .price{font-weight:600; color:var(--moss); white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .menu-row .tag{
+    font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--mustard); align-self:start; margin-top:3px;
+  }
+
+  /* ---------- SUASANA ---------- */
+  .suasana{padding:72px 0; border-bottom:1px solid var(--line);}
+  .gal{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    grid-template-rows:180px 180px;
+    gap:12px;
+  }
+  .gal > div{
+    grid-row:span 2;
+    border-radius:4px;
+    position:relative;
+    overflow:hidden;
+    display:flex; align-items:flex-end;
+    padding:16px;
+    color:#fff;
+    font-size:0.85rem;
+    font-weight:600;
+  }
+  .gal > div:nth-child(1){grid-row:span 2;}
+  .gal > div:nth-child(2), .gal > div:nth-child(3){grid-row:span 1;}
+  .gal-a{background:linear-gradient(160deg, #5B6B45, #3A4429);}
+  .gal-b{background:linear-gradient(160deg, #C99A3B, #8E6A24);}
+  .gal-c{background:linear-gradient(160deg, #4A3524, #2A1C12);}
+  .gal-d{background:linear-gradient(160deg, #8E6A24, #C99A3B); grid-column:2;}
+  .gal-e{background:linear-gradient(160deg, #3A4429, #5B6B45); grid-column:3;}
+  .gal > div span{position:relative; z-index:2;}
+  .gal > div::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(0,0,0,0.35), transparent 55%);
+  }
+
+  /* ---------- TESTIMONI ---------- */
+  .testi{padding:72px 0; border-bottom:1px solid var(--line);}
+  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+  .testi-card{padding:0;}
+  .testi-card svg{width:28px; height:22px; color:var(--mustard); margin-bottom:16px; display:block;}
+  .testi-card p{font-family:'Fraunces', serif; font-size:1.05rem; font-style:italic; color:var(--fg); margin:0 0 16px;}
+  .testi-name{font-size:0.85rem; font-weight:700; color:var(--fg-muted);}
+  .testi-role{font-size:0.8rem; color:var(--fg-muted); opacity:0.75;}
+
+  /* ---------- FAQ ---------- */
+  .faq{padding:72px 0; border-bottom:1px solid var(--line);}
+  .faq-list{max-width:760px;}
+  details{
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  details summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'Fraunces', serif;
+    font-size:1.08rem;
+    font-weight:500;
+    gap:16px;
+  }
+  details summary::-webkit-details-marker{display:none;}
+  .faq-icon{
+    flex-shrink:0; width:22px; height:22px;
+    border:1px solid var(--line); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; color:var(--moss);
+    transition:transform .2s;
+  }
+  details[open] .faq-icon{transform:rotate(45deg);}
+  details p{color:var(--fg-muted); margin:14px 0 0; max-width:64ch; font-size:0.95rem;}
+
+  /* ---------- CTA / LOKASI ---------- */
+  .lokasi{padding:72px 0;}
+  .lokasi-inner{
+    display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;
+  }
+  .lokasi h2{font-size:clamp(1.7rem,3vw,2.2rem); max-width:14ch;}
+  .lokasi-list{margin-top:28px; display:flex; flex-direction:column; gap:16px;}
+  .lokasi-list div{display:flex; gap:14px; font-size:0.95rem;}
+  .lokasi-list strong{font-weight:700; min-width:96px; color:var(--fg-muted); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.03em; padding-top:2px;}
+  .map-box{
+    aspect-ratio:1/0.85;
+    border-radius:4px;
+    background:var(--parchment-2);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .map-box svg{width:80%; height:80%;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:32px 0;
+  }
+  .footer-inner{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.85rem; color:var(--fg-muted);
+    flex-wrap:wrap; gap:12px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    nav.links{display:none;}
+    .hero-inner{grid-template-columns:1fr; gap:40px;}
+    .hero-art{order:-1;}
+    .hero-art svg{max-width:220px;}
+    .usp-grid{grid-template-columns:1fr; gap:28px;}
+    .usp-item{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:24px;}
+    .usp-item:first-child{border-top:none; padding-top:0;}
+    .testi-grid{grid-template-columns:1fr; gap:36px;}
+    .lokasi-inner{grid-template-columns:1fr;}
+    .gal{grid-template-columns:1fr 1fr; grid-template-rows:140px 140px 140px;}
+    .gal > div:nth-child(1){grid-column:1/3; grid-row:1;}
+    .gal-d{grid-column:1;}
+    .gal-e{grid-column:2;}
+    .gal > div:nth-child(2), .gal > div:nth-child(3){grid-row:2;}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 18px;}
+    .hero{padding:48px 0 40px;}
+    .hero-ctas{flex-direction:column; align-items:flex-start;}
+    .hero-ctas .btn{width:100%; justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 9H17V15C17 18 14.5 20 11 20H10C6.5 20 4 18 4 15V9Z" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M17 10H18.5C19.9 10 21 11.1 21 12.5C21 13.9 19.9 15 18.5 15H17" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 5.5C8 4.5 9 4.3 9 3.3M12 5.5C12 4.5 13 4.3 13 3.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      Kopi Teduh
+    </div>
+    <nav class="links">
+      <a href="#menu">Menu</a>
+      <a href="#suasana">Suasana</a>
+      <a href="#testimoni">Testimoni</a>
+      <a href="#faq">FAQ</a>
+      <a href="#lokasi">Lokasi</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="#lokasi">Reservasi via WA</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow-line"><span class="dot"></span> Coffee shop &amp; ruang kerja santai, Surabaya</div>
+      <h1 class="hero-title">Tempat ngopi yang bikin kamu betah lupa waktu.</h1>
+      <p class="hero-sub">Kopi single origin, wifi kencang, dan sudut duduk yang teduh — cocok buat kerja, ngobrol santai, atau sekadar menikmati sore.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#lokasi">Reservasi Meja</a>
+        <a class="btn btn-ghost" href="#menu">Lihat Menu</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>07.00–22.00</strong>Buka setiap hari</div>
+        <div><strong>4.8/5</strong>dari 300+ ulasan</div>
+        <div><strong>40+</strong>kursi &amp; sudut kerja</div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 130C90 125 94 121 99 121H201C206 121 210 125 210 130V210C210 240 185 262 155 262H145C115 262 90 240 90 210V130Z" fill="#C99A3B" opacity="0.18"/>
+        <path d="M95 140H205V208C205 234 183 254 157 254H143C117 254 95 234 95 208V140Z" stroke="#5B6B45" stroke-width="3"/>
+        <path d="M205 150H222C234 150 244 160 244 172C244 184 234 194 222 194H205" stroke="#5B6B45" stroke-width="3"/>
+        <path d="M125 100C125 88 138 84 138 72M155 100C155 88 168 84 168 72M175 100C175 92 182 89 182 80" stroke="#C99A3B" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="150" cy="270" r="4" fill="#5B6B45"/>
+        <ellipse cx="150" cy="286" rx="70" ry="8" fill="#2A1C12" opacity="0.08"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="usp">
+  <div class="wrap usp-grid">
+    <div class="usp-item">
+      <span class="num">Kenapa Kopi Teduh</span>
+      <h3>Biji kopi lokal, disangrai sendiri</h3>
+      <p>Kami sangrai biji dari petani Jawa Timur langsung tiap minggu, jadi rasa selalu segar — bukan stok gudang.</p>
+    </div>
+    <div class="usp-item">
+      <span class="num">&nbsp;</span>
+      <h3>Wifi stabil, colokan di tiap meja</h3>
+      <p>Serius buat kerja atau kelas online — bukan cuma tempelan promosi, kami tes kecepatan tiap pagi.</p>
+    </div>
+    <div class="usp-item">
+      <span class="num">&nbsp;</span>
+      <h3>Suasana teduh, nggak berisik</h3>
+      <p>Ada zona tenang buat fokus dan zona ngobrol buat nongkrong, jadi kamu bisa pilih sesuai kebutuhan.</p>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Menu andalan</h2>
+        <p>Sebagian kecil dari daftar minuman dan camilan yang paling sering dipesan.</p>
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-row">
+        <span class="tag">Favorit</span>
+        <div>
+          <div class="name">Kopi Susu Gula Aren</div>
+          <div class="desc">Espresso rumahan, susu segar, gula aren asli — signature kami sejak hari pertama.</div>
+        </div>
+        <div class="price">Rp 22.000</div>
+      </div>
+      <div class="menu-row">
+        <span class="tag">Baru</span>
+        <div>
+          <div class="name">V60 Single Origin</div>
+          <div class="desc">Biji minggu ini dari Ijen, rasa fruity dengan after-taste manis yang ringan.</div>
+        </div>
+        <div class="price">Rp 28.000</div>
+      </div>
+      <div class="menu-row">
+        <span class="tag">&nbsp;</span>
+        <div>
+          <div class="name">Cold Brew Original</div>
+          <div class="desc">Diseduh dingin 18 jam, cocok buat siang terik atau butuh energi cepat.</div>
+        </div>
+        <div class="price">Rp 25.000</div>
+      </div>
+      <div class="menu-row">
+        <span class="tag">&nbsp;</span>
+        <div>
+          <div class="name">Roti Bakar Kopi Rimba</div>
+          <div class="desc">Roti gandum, selai kopi buatan sendiri, taburan kacang almond.</div>
+        </div>
+        <div class="price">Rp 18.000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="suasana" id="suasana">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Suasana di dalam</h2>
+        <p>Sudut-sudut favorit pelanggan — dari meja komunal sampai kursi teras.</p>
+      </div>
+    </div>
+    <div class="gal">
+      <div class="gal-a"><span>Meja komunal utama</span></div>
+      <div class="gal-b"><span>Bar seduh manual</span></div>
+      <div class="gal-d"><span>Sudut kerja tenang</span></div>
+      <div class="gal-c"><span>Teras luar</span></div>
+      <div class="gal-e"><span>Rak biji kopi</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="testi" id="testimoni">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Kata pelanggan</h2>
+      </div>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <svg viewBox="0 0 32 24" fill="currentColor"><path d="M0 24V13.5C0 6 4.5 1 12 0L13 4C8 5 6 8 6 12H12V24H0ZM19 24V13.5C19 6 23.5 1 31 0L32 4C27 5 25 8 25 12H31V24H19Z"/></svg>
+        <p>Wifi-nya beneran kencang, jarang saya temui coffee shop yang segitu niatnya.</p>
+        <div class="testi-name">Dinda R.</div>
+        <div class="testi-role">Freelance designer</div>
+      </div>
+      <div class="testi-card">
+        <svg viewBox="0 0 32 24" fill="currentColor"><path d="M0 24V13.5C0 6 4.5 1 12 0L13 4C8 5 6 8 6 12H12V24H0ZM19 24V13.5C19 6 23.5 1 31 0L32 4C27 5 25 8 25 12H31V24H19Z"/></svg>
+        <p>Kopi susu gula arennya jadi patokan saya buat bandingin coffee shop lain.</p>
+        <div class="testi-name">Bagas W.</div>
+        <div class="testi-role">Mahasiswa</div>
+      </div>
+      <div class="testi-card">
+        <svg viewBox="0 0 32 24" fill="currentColor"><path d="M0 24V13.5C0 6 4.5 1 12 0L13 4C8 5 6 8 6 12H12V24H0ZM19 24V13.5C19 6 23.5 1 31 0L32 4C27 5 25 8 25 12H31V24H19Z"/></svg>
+        <p>Sudut kerjanya tenang banget, saya bisa meeting online tanpa ganggu orang lain.</p>
+        <div class="testi-name">Reza P.</div>
+        <div class="testi-role">Staff marketing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Pertanyaan yang sering ditanyakan</h2>
+      </div>
+    </div>
+    <div class="faq-list">
+      <details open>
+        <summary>Apakah perlu reservasi dulu sebelum datang?<span class="faq-icon">+</span></summary>
+        <p>Tidak wajib untuk kunjungan biasa. Tapi kalau datang rombongan lebih dari 6 orang atau di jam ramai (17.00–20.00), kami sarankan reservasi via WhatsApp supaya meja disiapkan.</p>
+      </details>
+      <details>
+        <summary>Apakah ada colokan listrik dan wifi gratis?<span class="faq-icon">+</span></summary>
+        <p>Ada, di setiap meja. Password wifi tertera di menu meja, dan kecepatannya kami cek rutin tiap pagi sebelum buka.</p>
+      </details>
+      <details>
+        <summary>Apakah bisa bawa laptop dan kerja lama di sini?<span class="faq-icon">+</span></summary>
+        <p>Sangat bisa. Ada zona tenang khusus untuk fokus kerja, terpisah dari zona ngobrol supaya tidak saling mengganggu.</p>
+      </details>
+      <details>
+        <summary>Apakah menerima pesanan untuk acara atau katering kecil?<span class="faq-icon">+</span></summary>
+        <p>Ya, untuk pesanan di atas 15 gelas atau acara kantor kecil, hubungi kami minimal H-2 lewat WhatsApp agar bisa disiapkan dengan baik.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="lokasi" id="lokasi">
+  <div class="wrap lokasi-inner">
+    <div>
+      <h2>Mampir kapan saja, kami tunggu.</h2>
+      <div class="lokasi-list">
+        <div><strong>Alamat</strong> Jl. Kertajaya No. 45, Gubeng, Surabaya</div>
+        <div><strong>Jam buka</strong> Setiap hari, 07.00 – 22.00 WIB</div>
+        <div><strong>Kontak</strong> 0812-3456-7890 (WhatsApp)</div>
+      </div>
+      <div class="hero-ctas" style="margin-top:32px;">
+        <a class="btn btn-primary" href="https://wa.me/6281234567890" target="_blank" rel="noopener">Chat via WhatsApp</a>
+        <a class="btn btn-ghost" href="#menu">Lihat menu lagi</a>
+      </div>
+    </div>
+    <div class="map-box">
+      <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 20H180V140H20V20Z" stroke="var(--line)" stroke-width="1.5"/>
+        <path d="M20 60H180M20 100H180M70 20V140M130 20V140" stroke="var(--line)" stroke-width="1"/>
+        <circle cx="100" cy="80" r="10" fill="var(--moss)"/>
+        <path d="M100 80C100 80 92 68 92 60C92 55.5 95.5 52 100 52C104.5 52 108 55.5 108 60C108 68 100 80 100 80Z" fill="var(--mustard)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>© 2026 Kopi Teduh. Studi kasus mini exercise — bukan bisnis nyata.</div>
+    <div>Dibuat sebagai contoh landing page</div>
+  </div>
+</footer>
+
+</body>
+</html>
